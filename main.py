@@ -42,5 +42,5 @@ def main(queue = "A100"):
         case "A100":
             print(f"Starting GPU for queue {queue}")
             a100_agent.remote()
-        else:
+        case _:
             print(f"Unsupported queue {queue}")
