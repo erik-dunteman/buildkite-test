@@ -26,14 +26,12 @@ def a100_agent():
     """
     GPU agent that runs the actual job
     """
-    print(f"Starting GPU agent for queue {queue}")
-    
     subprocess.run([
         "buildkite-agent", 
         "start",
         "--token", os.environ["AGENT_TOKEN"],
         "--disconnect-after-job",  # Agent will stop after completing one job
-        "--tags", f"queue=A100",  # Tag this agent for this specific job
+        "--tags", "queue=A100",  # Tag this agent for this specific job
     ])
 
 @app.local_entrypoint()
