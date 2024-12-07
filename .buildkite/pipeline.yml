@@ -2,11 +2,22 @@ steps:
   # Step 1: CPU step that starts GPU agent
   - label: "Start GPU"
     key: "gpu-starter"
-    command: modal_client.sh
+    command: |
+     pip install -U modal
+    
+      # Create modal config file using secrets
+      cat << EOF > ~/.modal.toml
+      [default]
+      token_id = "$(buildkite-agent secret get modal_token_id)"
+      token_secret = "$(buildkite-agent secret get modal_token_secret)"
+      EOF
+
+      # Now run modal
+      modal run main.py --queue A100
 
   # Step 2: The actual GPU work, which will be picked up by our Modal GPU agent
   - label: "Do GPU Work" 
     key: "gpu-work"
     command: nvidia-smi
     agents:
-      queue: "$$BUILDKITE_BUILD_NUMBER_gpu"
+      queue: "A100"
