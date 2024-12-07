@@ -1,24 +1,12 @@
 steps:
-  - command: |
-      # Generate unique ID for this pipeline run
-      JOB_ID="gpu-job-${BUILDKITE_BUILD_NUMBER}-${RANDOM}"
-      
-      # Start the Modal GPU agent and wait (this blocks until GPU job completes)
-      modal run main.py --job-id=$JOB_ID &
-      MODAL_PID=$!
-      
-      # Give the GPU agent time to start up
-      sleep 10
-      
-      # Upload the GPU job step
-      cat << EOF | buildkite-agent pipeline upload
-      steps:
-        - label: "GPU Job"
-          key: "gpu-task"
-          command: "echo 'Running on GPU' && sleep 30"  # Replace with your actual GPU command
-          agents:
-            job: $JOB_ID
-      EOF
-      
-      # Wait for Modal to finish (which will happen after GPU job completes)
-      wait $MODAL_PID
+  # Step 1: CPU step that starts GPU agent
+  - label: "Start GPU"
+    key: "gpu-starter"
+    command: "modal run main.py"
+
+  # Step 2: The actual GPU work, which will be picked up by our Modal GPU agent
+  - label: "Do GPU Work" 
+    key: "gpu-work"
+    command: nvidia-smi
+    agents:
+      job: "${BUILDKITE_BUILD_NUMBER}_gpu"  # Match the job-id we gave to Modal

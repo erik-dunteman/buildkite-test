@@ -38,6 +38,7 @@ def gpu_agent(job_id: str):
 
 @app.local_entrypoint()
 def main(job_id: str):
+    job_id = os.environ["BUILDKITE_BUILD_NUMBER"] + "_gpu"
     print(f"Starting GPU for job {job_id}")
     gpu_agent.remote(job_id) # Blocks until the agent has completed its job
     print(f"GPU complete for job {job_id}")
