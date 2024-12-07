@@ -22,23 +22,23 @@ image = (
     timeout=60*60, # One hour max timeout
     secrets=[modal.Secret.from_name("buildkite-agent")]
 )
-def gpu_agent(job_id: str):
+def gpu_agent(queue_name: str):
     """
     GPU agent that runs the actual job
     """
-    print(f"Starting GPU agent for job {job_id}")
+    print(f"Starting GPU agent for queue {queue_name}")
     
     subprocess.run([
         "buildkite-agent", 
         "start",
         "--token", os.environ["AGENT_TOKEN"],
         "--disconnect-after-job",  # Agent will stop after completing one job
-        "--tags", f"job={job_id}",  # Tag this agent for this specific job
+        "--tags", f"queue={queue_name}",  # Tag this agent for this specific job
     ])
 
 @app.local_entrypoint()
 def main():
-    job_id = os.environ["BUILDKITE_BUILD_NUMBER"] + "_gpu"
-    print(f"Starting GPU for job {job_id}")
-    gpu_agent.remote(job_id) # Blocks until the agent has completed its job
-    print(f"GPU complete for job {job_id}")
+    queue_name = os.environ["BUILDKITE_BUILD_NUMBER"] + "_gpu"
+    print(f"Starting GPU agent listening on queue {queue_name}")
+    gpu_agent.remote(queue_name) # Blocks until the agent has completed its job
+    print(f"GPU complete for build {queue_name}")

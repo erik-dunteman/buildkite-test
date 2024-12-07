@@ -9,4 +9,4 @@ steps:
     key: "gpu-work"
     command: nvidia-smi
     agents:
-      job: "$$BUILDKITE_BUILD_NUMBER_gpu"  # Match the job-id we gave to Modal
+      queue: "$$BUILDKITE_BUILD_NUMBER_gpu"
