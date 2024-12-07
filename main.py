@@ -36,9 +36,8 @@ def a100_agent():
 
 @app.local_entrypoint()
 def main(queue = "A100"):
-    match queue:
-        case "A100":
-            print(f"Starting GPU for queue {queue}")
-            a100_agent.remote()
-        case _:
-            print(f"Unsupported queue {queue}")
+    if queue == "A100":
+        print(f"Starting GPU for queue {queue}")
+        a100_agent.remote()
+    else:
+        print(f"Unsupported queue {queue}")
