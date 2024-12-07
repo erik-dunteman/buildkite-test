@@ -3,7 +3,7 @@ steps:
   - label: "Start GPU"
     key: "gpu-starter"
     command: |
-     pip install -U modal
+      pip install -U modal
     
       # Create modal config file using secrets
       cat << EOF > ~/.modal.toml
