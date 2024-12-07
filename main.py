@@ -19,7 +19,7 @@ image = (
 @app.function(
     image=image,
     gpu="any",
-    timeout=60*60, # One hour
+    timeout=60*60, # One hour max timeout
     secrets=[modal.Secret.from_name("buildkite-agent")]
 )
 def gpu_agent(job_id: str):
@@ -28,7 +28,6 @@ def gpu_agent(job_id: str):
     """
     print(f"Starting GPU agent for job {job_id}")
     
-    # Start the agent with a short timeout
     subprocess.run([
         "buildkite-agent", 
         "start",
