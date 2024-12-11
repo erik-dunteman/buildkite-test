@@ -8,6 +8,13 @@ BUILDKITE_COMMIT = "bfd610430c04d2962a03a2db304fb13b09b4f1b3" # todo: remove thi
 GPU = os.getenv("GPU")
 CMD = os.getenv("CMD")
 
+PASSTHROUGH_ENV_VARS = {
+    "BUILDKITE_COMMIT": BUILDKITE_COMMIT,
+    "HF_TOKEN": os.getenv("HF_TOKEN"),
+    "VLLM_USAGE_SOURCE": os.getenv("VLLM_USAGE_SOURCE"),
+}
+    
+
 BASE_IMG = f"public.ecr.aws/q9t5s3a7/vllm-ci-postmerge-repo:{BUILDKITE_COMMIT}"
 
 app = modal.App("buildkite-agent")
@@ -26,10 +33,11 @@ image = (
     secrets=[modal.Secret.from_name("buildkite-agent")],
     volumes={"/root/.cache/huggingface": hf_cache},
 )
-def runner(cmd: str = ""):
-    """
-    GPU agent that runs the actual job
-    """
+def runner(env: dict, cmd: str = ""):
+    # Set passthrough environment variables in remote container
+    for k, v in env.items():
+        os.environ[k] = v
+    
     subprocess.run(cmd.split(" "))
 
 @app.local_entrypoint()
@@ -38,4 +46,4 @@ def main():
     print(f"\t- Commit: {BUILDKITE_COMMIT}")
     print(f"\t- GPU: {GPU}")
     print(f"\t- CMD: {CMD}")
-    runner.remote(CMD)
+    runner.remote(env=PASSTHROUGH_ENV_VARS, cmd=CMD)
