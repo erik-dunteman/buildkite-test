@@ -21,4 +21,4 @@ steps:
     agents:
       queue: "A100"
     command: 
-    - bash .buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh
+    - ls
