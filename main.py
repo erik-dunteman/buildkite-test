@@ -5,7 +5,7 @@ import os
 
 BUILDKITE_COMMIT = os.getenv("BUILDKITE_COMMIT")
 BUILDKITE_COMMIT = "bfd610430c04d2962a03a2db304fb13b09b4f1b3" # todo: remove this override
-GPU = os.environ("GPU")
+GPU = os.environ["GPU"]
 
 BASE_IMG = f"public.ecr.aws/q9t5s3a7/vllm-ci-postmerge-repo:{BUILDKITE_COMMIT}"
 
