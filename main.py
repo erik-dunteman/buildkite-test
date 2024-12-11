@@ -38,4 +38,4 @@ def main(script: str):
     print(f"\t- Commit: {BUILDKITE_COMMIT}")
     print(f"\t- GPU: {GPU}")
     print(f"\t- Script: {script}")
-    runner(script)
+    runner.remote(script)
