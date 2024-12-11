@@ -34,6 +34,7 @@ image = (
     volumes={"/root/.cache/huggingface": hf_cache},
 )
 def runner(env: dict, cmd: str = ""):
+    print(env)
     # Set passthrough environment variables in remote container
     for k, v in env.items():
         os.environ[k] = v
