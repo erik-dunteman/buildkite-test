@@ -30,7 +30,7 @@ def runner(cmd: str = ""):
     """
     GPU agent that runs the actual job
     """
-    subprocess.run([cmd])
+    subprocess.run(cmd.split(" "))
 
 @app.local_entrypoint()
 def main():

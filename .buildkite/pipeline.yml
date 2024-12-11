@@ -4,7 +4,7 @@ steps:
     key: "gpu-launcher"
     env: 
       GPU: a100
-      CMD: ".buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
+      CMD: "bash .buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
     commands:
       - pip install -U modal
       - |
