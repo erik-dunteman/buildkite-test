@@ -18,6 +18,7 @@ steps:
   # Step 2: The actual GPU work, which will be picked up by our Modal GPU agent
   - label: "Modal GPU Agent" 
     key: "gpu-agent"
-    command: nvidia-smi
     agents:
       queue: "A100"
+    command: 
+    - bash .buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh
