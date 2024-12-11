@@ -2,9 +2,14 @@ steps:
   # Step 1: CPU step that starts GPU agent
   - label: "Modal Client"
     key: "gpu-launcher"
-    env: 
-      GPU: a100
-      CMD: "bash .buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
+    env:
+      GPU: "a100"
+      BUILDKITE_COMMIT: "$BUILDKITE_COMMIT"
+      VLLM_USAGE_SOURCE: "ci-test"
+      HF_TOKEN:
+        from-secret-key:
+          name: hf-token-secret
+          key: token
     commands:
       - pip install -U modal
       - |
