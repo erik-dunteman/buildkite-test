@@ -13,12 +13,5 @@ steps:
       EOF
 
       # Now run modal
-      modal run main.py --queue A100
-
-  # Step 2: The actual GPU work, which will be picked up by our Modal GPU agent
-  - label: "Modal GPU Agent" 
-    key: "gpu-agent"
-    agents:
-      queue: "A100"
-    command: 
-    - ls
+      export GPU=a100
+      modal run main.py --script ".buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
