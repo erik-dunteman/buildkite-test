@@ -1,7 +1,7 @@
 steps:
   # Step 1: CPU step that starts GPU agent
-  - label: "Start GPU"
-    key: "gpu-starter"
+  - label: "Modal Client"
+    key: "gpu-launcher"
     command: |
       pip install -U modal
     
@@ -16,8 +16,8 @@ steps:
       modal run main.py --queue A100
 
   # Step 2: The actual GPU work, which will be picked up by our Modal GPU agent
-  - label: "Do GPU Work" 
-    key: "gpu-work"
+  - label: "Modal GPU Agent" 
+    key: "gpu-agent"
     command: nvidia-smi
     agents:
       queue: "A100"
