@@ -2,16 +2,16 @@ steps:
   # Step 1: CPU step that starts GPU agent
   - label: "Modal Client"
     key: "gpu-launcher"
-    command: |
-      pip install -U modal
-    
-      # Create modal config file using secrets
-      cat << EOF > ~/.modal.toml
-      [default]
-      token_id = "$(buildkite-agent secret get modal_token_id)"
-      token_secret = "$(buildkite-agent secret get modal_token_secret)"
-      EOF
-
-      # Now run modal
-      export GPU=a100
-      modal run main.py --script ".buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
+    env: 
+      GPU: a100
+      CMD: ".buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
+    commands:
+      - pip install -U modal
+      - |
+        # Create modal config file using secrets
+        cat << EOF > ~/.modal.toml
+        [default]
+        token_id = "$(buildkite-agent secret get modal_token_id)"
+        token_secret = "$(buildkite-agent secret get modal_token_secret)"
+        EOF
+      - modal run main.py
