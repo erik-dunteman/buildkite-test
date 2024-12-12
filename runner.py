@@ -46,5 +46,8 @@ def main(command: str = ""):
     print(f"\t- Commit:  {BUILDKITE_COMMIT}")
     print(f"\t- GPU:     {GPU}")
     print(f"\t- Command: {command}")
-    print(f"\t- Env:     {PASSTHROUGH_ENV_VARS}")
+    
+    token_renderable = PASSTHROUGH_ENV_VARS["HF_TOKEN"][:4] + "*" * (len(PASSTHROUGH_ENV_VARS["HF_TOKEN"]) - 4)
+    print(f"\t- HF_TOKEN: {token_renderable}")
+
     runner.remote(env=PASSTHROUGH_ENV_VARS, cmd=command)
