@@ -1,6 +1,7 @@
 import modal
 import subprocess
 import os
+import sys
 
 # Env vars used for constructing modal image
 BUILDKITE_COMMIT = os.getenv("BUILDKITE_COMMIT")
@@ -37,8 +38,32 @@ def runner(env: dict, cmd: str = ""):
     for k, v in env.items():
         os.environ[k] = v
 
+    # Debug Python environment
+    print("\n=== Python Environment Info ===")
+    print(f"Python Version: {sys.version}")
+    print(f"Python Executable: {sys.executable}")
+    print(f"Python Path: {sys.path}")
+    
+    # List all installed packages
+    print("\n=== Installed Packages ===")
+    subprocess.run(["pip", "list"])
+    
+    # Try to get vllm package info specifically
+    print("\n=== VLLM Package Info ===")
+    subprocess.run(["pip", "show", "vllm"])
+    
+    # Show current working directory and its contents
+    print("\n=== Working Directory Info ===")
+    print(f"Current Directory: {os.getcwd()}")
+    subprocess.run(["ls", "-la"])
+
     # TODO: remove this cmd override
     cmd = "python3 -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3.1-8B-Instruct"
+    
+    # Execute the original command
+    print("\n=== Executing Command ===")
+    print(f"Command: {cmd}")
+
     
     # Execite command
     subprocess.run(cmd.split(" "))
