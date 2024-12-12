@@ -14,5 +14,5 @@ steps:
         token_id = "$(buildkite-agent secret get modal_token_id)"
         token_secret = "$(buildkite-agent secret get modal_token_secret)"
         EOF
-      - modal run main.py \
+      - modal run runner \
         --command "bash ./.buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
