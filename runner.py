@@ -30,7 +30,6 @@ image = (
     image=image,
     gpu=GPU, # GPU can be "A100", "A10G", "H100", "T4"
     timeout=60*60, # One hour max timeout
-    secrets=[modal.Secret.from_name("buildkite-runner")],
     volumes={"/root/.cache/huggingface": hf_cache},
 )
 def runner(env: dict, cmd: str = ""):
