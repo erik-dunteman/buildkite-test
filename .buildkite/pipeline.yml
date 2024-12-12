@@ -14,4 +14,4 @@ steps:
         token_secret = "$(buildkite-agent secret get modal_token_secret)"
         EOF
       - export HF_TOKEN="$(buildkite-agent secret get hf_token_secret)"
-      - modal run -q runner --command "bash ./.buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
+      - modal run runner --command "bash ./.buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"

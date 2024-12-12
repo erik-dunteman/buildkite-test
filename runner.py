@@ -36,6 +36,9 @@ def runner(env: dict, cmd: str = ""):
     # Set passthrough environment variables in remote container
     for k, v in env.items():
         os.environ[k] = v
+
+    # TODO: remove this cmd override
+    cmd = "python3 -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3.1-8B-Instruct"
     
     # Execite command
     subprocess.run(cmd.split(" "))
