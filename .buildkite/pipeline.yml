@@ -1,10 +1,8 @@
 steps:
-  # Step 1: CPU step that starts GPU agent
-  - label: "Modal Client"
-    key: "gpu-launcher"
+  - label: "A100"
+    key: "gpu-runner"
     env:
       GPU: "a100"
-      BUILDKITE_COMMIT: "$BUILDKITE_COMMIT"
       VLLM_USAGE_SOURCE: "ci-test"
       HF_TOKEN: "$(buildkite-agent secret get hf_token_secret)"
     commands:
@@ -16,4 +14,5 @@ steps:
         token_id = "$(buildkite-agent secret get modal_token_id)"
         token_secret = "$(buildkite-agent secret get modal_token_secret)"
         EOF
-      - modal run main.py
+      - modal run main.py \
+        --command "bash ./.buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
