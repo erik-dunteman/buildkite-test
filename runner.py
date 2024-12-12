@@ -46,4 +46,5 @@ def main(command: str = ""):
     print(f"\t- Commit:  {BUILDKITE_COMMIT}")
     print(f"\t- GPU:     {GPU}")
     print(f"\t- Command: {command}")
+    print(f"\t- Env:     {PASSTHROUGH_ENV_VARS}")
     runner.remote(env=PASSTHROUGH_ENV_VARS, cmd=command)
