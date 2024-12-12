@@ -4,7 +4,6 @@ steps:
     env:
       GPU: "a100"
       VLLM_USAGE_SOURCE: "ci-test"
-      HF_TOKEN: $(buildkite-agent secret get hf_token_secret)
     commands:
       - pip install -U modal
       - |
@@ -14,4 +13,5 @@ steps:
         token_id = "$(buildkite-agent secret get modal_token_id)"
         token_secret = "$(buildkite-agent secret get modal_token_secret)"
         EOF
+      - export HF_TOKEN="$(buildkite-agent secret get hf_token_secret)"
       - modal run runner --command "bash ./.buildkite/nightly-benchmarks/scripts/run-performance-benchmarks.sh"
