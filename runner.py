@@ -23,8 +23,9 @@ hf_cache = modal.Volume.from_name("vllm-benchmark-hf-cache", create_if_missing=T
 BASE_IMG = f"public.ecr.aws/q9t5s3a7/vllm-ci-postmerge-repo:{BUILDKITE_COMMIT}"
 image = (
     modal.Image.from_registry(BASE_IMG, add_python="3.12")
+    .workdir("/vllm-workspace/vllm")
+    .run_commands("VLLM_USE_PRECOMPILED=1 pip install -e .")
     .workdir("/vllm-workspace")
-    .run_commands("VLLM_USE_PRECOMPILED=1 pip install --editable .")
 )
 
 # Remote function to run in the container
