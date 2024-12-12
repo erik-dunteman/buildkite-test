@@ -4,7 +4,8 @@ steps:
     env:
       GPU: "a100"
       VLLM_USAGE_SOURCE: "ci-test"
-      HF_TOKEN: "$(buildkite-agent secret get hf_token_secret)"
+      HF_TOKEN: 
+        from_secret: hf_token_secret
     commands:
       - pip install -U modal
       - |
