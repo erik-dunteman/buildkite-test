@@ -23,8 +23,6 @@ hf_cache = modal.Volume.from_name("vllm-benchmark-hf-cache", create_if_missing=T
 BASE_IMG = f"public.ecr.aws/q9t5s3a7/vllm-ci-postmerge-repo:{BUILDKITE_COMMIT}"
 image = (
     modal.Image.from_registry(BASE_IMG, add_python="3.12")
-    .workdir("/vllm-workspace/vllm")
-    .run_commands("VLLM_USE_PRECOMPILED=1 pip install -e .")
     .workdir("/vllm-workspace")
 )
 
@@ -39,6 +37,10 @@ def runner(env: dict, cmd: str = ""):
     # Set passthrough environment variables in remote container
     for k, v in env.items():
         os.environ[k] = v
+
+    print("Installing VLLM from source, commit:", BUILDKITE_COMMIT)
+    # Install vllm from source
+    subprocess.run(["pip3", "install", f"git+https://github.com/vllm-project/vllm.git@{BUILDKITE_COMMIT}"])
 
     # Debug Python environment
     print("\n=== Python Environment Info ===")
@@ -60,12 +62,12 @@ def runner(env: dict, cmd: str = ""):
     subprocess.run(["ls", "-la"])
 
     # TODO: remove this cmd override
-    cmd = "python3 -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3.1-8B-Instruct"
+    # cmd = "python3 -m vllm.entrypoints.openai.api_server --model meta-llama/Meta-Llama-3.1-8B-Instruct"
+    cmd = "nvidia-smi"
     
     # Execute the original command
     print("\n=== Executing Command ===")
     print(f"Command: {cmd}")
-
     
     # Execite command
     subprocess.run(cmd.split(" "))
